@@ -11,11 +11,31 @@ class SettingScreen extends StatelessWidget {
         middle: Text("Setting Screen"),
       ),
       child: Center(
-        child: Text(
-          "Setting Screen",
-          style: CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle,
-        ),
-      ),
+          child: CupertinoButton.filled(
+              child: Text(
+                "Logout",
+              ),
+              onPressed: () => _openAlert(context))),
     );
   }
+}
+
+void _openAlert(BuildContext context) {
+  showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text("Are you sure to logout?"),
+          actions: [
+            CupertinoDialogAction(
+              child: Text("Yes"),
+              onPressed: () => Navigator.pop(context),
+            ),
+            CupertinoDialogAction(
+              child: Text("No"),
+              onPressed: () => Navigator.pop(context),
+            )
+          ],
+        );
+      });
 }

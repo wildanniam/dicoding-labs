@@ -1,4 +1,6 @@
-import 'package:cupertino_app/setting_screen.dart';
+import 'package:cupertino_app/category_screen.dart';
+import 'package:cupertino_app/home_screen.dart';
+import 'package:cupertino_app/my_route.dart';
 import 'package:flutter/cupertino.dart';
 
 void main(List<String> args) {
@@ -15,17 +17,14 @@ class MyApp extends StatelessWidget {
       theme: const CupertinoThemeData(
         primaryColor: CupertinoColors.systemBlue,
       ),
-      home: SettingScreen(),
+      initialRoute: MyRoute.home.name,
+      routes: {
+        MyRoute.home.name: (context) => const HomeScreen(),
+        MyRoute.category.name: (context) => CategoryScreen(
+              selectedCategory:
+                  ModalRoute.of(context)?.settings.arguments as String,
+            )
+      },
     );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
   }
 }
