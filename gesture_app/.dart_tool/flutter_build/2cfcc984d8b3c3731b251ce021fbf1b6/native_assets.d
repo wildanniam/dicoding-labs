@@ -1,0 +1,1 @@
+ /Users/wildanniam/development/Project/dicoding/dicoding-labs/gesture_app/.dart_tool/flutter_build/2cfcc984d8b3c3731b251ce021fbf1b6/native_assets.yaml: 
