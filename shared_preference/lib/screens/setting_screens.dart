@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preference/model/setting.dart';
+import 'package:shared_preference/providers/notification_state_provider.dart';
+import 'package:shared_preference/providers/shared_preferences_provider.dart';
+import 'package:shared_preference/utils/notification_state.dart';
+import 'package:shared_preference/utils/page_size_number.dart';
 import 'package:shared_preference/widgets/maximum_page_size_field.dart';
 import 'package:shared_preference/widgets/notification_field.dart';
 import 'package:shared_preference/widgets/save_button.dart';
@@ -22,6 +28,25 @@ class _SettingPageState extends State<SettingPage> {
     maximumPageSizeController.dispose();
     signatureController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final notificationStateProvider = context.read<NotificationStateProvider>();
+    final sharedPreferencesProvider = context.read<SharedPreferencesProvider>();
+
+    Future.microtask(() async {
+      sharedPreferencesProvider.getSettingValue();
+      final setting = sharedPreferencesProvider.setting;
+      if (setting != null) {
+        maximumPageSizeController.text = setting.pageNumber.toString();
+        signatureController.text = setting.signature;
+        notificationStateProvider.notificationState = setting.notificationEnable
+            ? NotificationState.enable
+            : NotificationState.disable;
+      }
+    });
   }
 
   @override
@@ -54,5 +79,25 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  void saveAction() {}
+  void saveAction() async {
+    final notificationState =
+        context.read<NotificationStateProvider>().notificationState;
+    final isNotificationEnable = notificationState.isEnable;
+    final maximumPageSize = int.tryParse(maximumPageSizeController.text) ??
+        maximumPageSizeNumbers.first;
+    final signature = signatureController.text;
+    final Setting setting = Setting(
+      notificationEnable: isNotificationEnable,
+      pageNumber: maximumPageSize,
+      signature: signature,
+    );
+
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final sharedPreferencesProvider = context.read<SharedPreferencesProvider>();
+    await sharedPreferencesProvider.saveSettingValue(setting);
+
+    scaffoldMessenger.showSnackBar(SnackBar(
+      content: Text(sharedPreferencesProvider.message),
+    ));
+  }
 }
