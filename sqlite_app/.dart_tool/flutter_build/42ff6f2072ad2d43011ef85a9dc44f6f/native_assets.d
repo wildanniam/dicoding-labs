@@ -1,0 +1,1 @@
+ /Users/wildanniam/development/Project/dicoding/dicoding-labs/sqlite_app/.dart_tool/flutter_build/42ff6f2072ad2d43011ef85a9dc44f6f/native_assets.yaml: 
